@@ -14,7 +14,7 @@ export const Register = async (req, res) => {
     }
   }
 
-  // Validasi email
+  // Validasi email jika sudah digunakan
   const cekEmail = await Users.findOne({
     where: {
       email: email,
