@@ -21,7 +21,9 @@ dotenv.config();
 // Import Router
 import UserRoutes from "./routes/UsersRoutes.js";
 import MemberRoutes from "./routes/MembersRoutes.js";
+import BorrowingRoutes from "./routes/BorrowingRoutes.js";
 import CategoryRoutes from "./routes/CategoryRoutes.js";
+import BooksRoutes from "./routes/BooksRoutes.js";
 
 // (async () => {
 //   await db.sync();
@@ -47,6 +49,8 @@ app.use(cookieParser()); //parsing cookie agar bisa digunakan value nya
 app.use(express.json()); //agar express bisa menerima data dalam bentuk JSON
 
 // Middleware router
+app.use(BooksRoutes);
+app.use(BorrowingRoutes);
 app.use(CategoryRoutes);
 app.use(UserRoutes);
 app.use(MemberRoutes);

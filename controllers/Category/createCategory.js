@@ -1,6 +1,6 @@
 import Categories from "../../models/CategoryModel.js";
 
-// Fungsi tambah member baru
+// Fungsi tambah category baru
 export const addCategory = async (req, res) => {
   const { name } = req.body; //request dari body
 

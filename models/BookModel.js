@@ -13,7 +13,6 @@ const Books = db.define(
       allowNull: false,
       validate: {
         notEmpty: true,
-        len: [3, 100],
       },
     },
     author: {
@@ -60,8 +59,9 @@ const Books = db.define(
 
 // Menghubungkan tabel books dengan category
 Categories.hasMany(Books, { foreignKey: "categoryId" });
+Books.belongsTo(Categories, { foreignKey: "id" });
 
 Borrowing.hasMany(Books, { foreignKey: "borrowingId" });
-Books.belongsTo(Borrowing, { foreignKey: "borrowingId" });
+Books.belongsTo(Borrowing, { foreignKey: "id" });
 
 export default Books;

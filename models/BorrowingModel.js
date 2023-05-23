@@ -1,7 +1,8 @@
-import { Sequelize } from "sequelize";
+import Sequelize from "sequelize";
 import db from "../config/db.js";
 
 import Member from "./MemberModel.js";
+import Books from "./BookModel.js";
 
 const { DataTypes } = Sequelize;
 
@@ -15,7 +16,7 @@ const Borrowing = db.define(
         notEmpty: true,
       },
     },
-    borrowId: {
+    booksId: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -31,7 +32,7 @@ const Borrowing = db.define(
     },
     return_at: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true,
       },
@@ -45,7 +46,7 @@ const Borrowing = db.define(
     },
     charge: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
       validate: {
         notEmpty: true,
       },
@@ -63,5 +64,7 @@ const Borrowing = db.define(
 
 // // Menghubungkan tabel borrowing dengan member
 Member.hasOne(Borrowing, { foreignKey: "memberId" });
+
+Borrowing.belongsTo(Member, { foreignKey: "memberId" });
 
 export default Borrowing;

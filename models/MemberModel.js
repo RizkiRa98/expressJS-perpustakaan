@@ -1,5 +1,6 @@
 import { Sequelize } from "sequelize";
 import db from "../config/db.js";
+import Borrowing from "./BorrowingModel.js";
 
 const { DataTypes } = Sequelize;
 
