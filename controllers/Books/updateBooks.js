@@ -1,4 +1,3 @@
-import { where } from "sequelize";
 import Books from "../../models/BookModel.js";
 import Categories from "../../models/CategoryModel.js";
 

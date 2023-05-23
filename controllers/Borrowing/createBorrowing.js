@@ -40,6 +40,8 @@ export const addBorrowing = async (req, res) => {
       msg: "Status harus returned atau not returned",
     });
   }
+
+  // Cek buku tersedia atau tidak
   const availableBook = await Books.findOne({
     where: {
       id: booksId,
