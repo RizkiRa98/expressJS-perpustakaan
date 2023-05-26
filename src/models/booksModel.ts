@@ -1,7 +1,7 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
-import db from "../config/db";
-import Categories from "./categoryModel";
-import Borrowing from "./borrowingModel";
+import {Model, DataTypes} from 'sequelize';
+import db from '../config/db';
+import Categories from './categoryModel';
+import Borrowing from './borrowingModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model book
 interface BookAttributes {
@@ -9,17 +9,19 @@ interface BookAttributes {
   author: string;
   publisher: string;
   categoryId: number;
-  status: "available" | "unavailable";
+  status: 'available' | 'unavailable';
   borrowingId?: number | null;
 }
 
-// Buat kelas Book yang mewarisi Model<BookAttributes> lalu implmenetasikan BookAttributes
+// Buat kelas Book yang mewarisi Model<BookAttributes>
+// lalu implmenetasikan BookAttributes
 class Books extends Model<BookAttributes> implements BookAttributes {
+  public readonly id!: number;
   public name!: string;
   public author!: string;
   public publisher!: string;
   public categoryId!: number;
-  public status!: "available" | "unavailable";
+  public status!: 'available' | 'unavailable';
   public borrowingId?: number | null;
 
   public readonly createdAt!: Date;
@@ -59,7 +61,8 @@ Books.init(
       },
     },
     status: {
-      type: DataTypes.ENUM("available", "unavailable"),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.ENUM('available', 'unavailable'),
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -76,16 +79,17 @@ Books.init(
   },
   {
     sequelize: db,
-    modelName: "books",
+    modelName: 'books',
     freezeTableName: true,
-  }
+  },
 );
 
 // Menghubungkan tabel books dengan category
-Categories.hasMany(Books, { foreignKey: "categoryId" });
-Books.belongsTo(Categories, { foreignKey: "id" });
+Categories.hasMany(Books, {foreignKey: 'categoryId'});
+Books.belongsTo(Categories, {foreignKey: 'categoryId'});
 
-Borrowing.hasMany(Books, { foreignKey: "borrowingId" });
-Books.belongsTo(Borrowing, { foreignKey: "id" });
+Borrowing.hasMany(Books, {foreignKey: 'borrowingId'});
+Books.belongsTo(Borrowing, {foreignKey: 'id'});
 
 export default Books;
+

@@ -1,5 +1,6 @@
-import { Request, Response } from "express";
-import Users from "../../models/userModel";
+import {Request, Response} from 'express';
+import Users from '../../models/userModel';
+import {WhereOptions} from 'sequelize';
 
 export const Logout = async (req: Request, res: Response): Promise<void> => {
   const refreshToken = req.cookies.refreshToken;
@@ -17,9 +18,9 @@ export const Logout = async (req: Request, res: Response): Promise<void> => {
     },
   });
 
-  // Jika token yang dikirim dari client tidak sesuai dengan yang ada di database
+  // Jika token dikirim dari client tidak sesuai dengan database
   if (!user[0]) {
-    res.sendStatus(204); //No Content
+    res.sendStatus(204); // No Content
     return;
   }
 
@@ -33,14 +34,15 @@ export const Logout = async (req: Request, res: Response): Promise<void> => {
     {
       where: {
         id: userId,
-      } as any,
-    }
+      } as WhereOptions<Users>,
+    },
   );
 
   // JIka refresh token sudah di hapus maka hapus cookie pada sisi client
-  res.clearCookie("refreshToken");
+  res.clearCookie('refreshToken');
   res.json({
-    msg: "Berhasil Logout",
+    msg: 'Berhasil Logout',
   });
   return;
 };
+

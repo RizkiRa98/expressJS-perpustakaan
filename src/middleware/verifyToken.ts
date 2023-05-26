@@ -1,24 +1,22 @@
 // Middleware application level
-import jwt from "jsonwebtoken";
-import { refreshToken } from "../controllers/Users/refreshToken.js";
-import { Request, Response, NextFunction } from "express";
-import Users from "../models/userModel";
+import {Request, Response, NextFunction} from 'express';
+import Users from '../models/userModel';
 
 // Menambahkan custom request menggunakan interface
 interface UserRequest extends Request {
-  userId?: Number;
+  userId?: number;
   name?: string;
   email?: string;
-  role?: "super admin" | "admin";
+  role?: 'super admin' | 'admin';
 }
 
 export const verifyToken = async (
   req: UserRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   if (!req.cookies.refreshToken) {
-    res.status(401).json({ msg: "Unauthorize, anda belum login!" });
+    res.status(401).json({msg: 'Unauthorize, anda belum login!'});
     return;
   }
 
@@ -29,12 +27,13 @@ export const verifyToken = async (
   });
 
   if (!user) {
-    res.status(404).json({ msg: "Anda Belum Login!" });
+    res.status(404).json({msg: 'Anda Belum Login!'});
     return;
   }
-  req.userId = user.id;
+  req.userId = user.id as number;
   req.name = user.name;
   req.email = user.email;
   req.role = user.role;
   next();
 };
+

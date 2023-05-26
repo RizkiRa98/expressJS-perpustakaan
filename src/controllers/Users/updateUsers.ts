@@ -1,18 +1,19 @@
-import { Request, Response } from "express";
-import Users from "../../models/userModel";
-import bcrypt from "bcrypt";
+import {Request, Response} from 'express';
+import Users from '../../models/userModel';
+import bcrypt from 'bcrypt';
 
-import validator from "validator";
+import validator from 'validator';
+import {WhereOptions} from 'sequelize';
 
 export const updateUser = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   // Cari user berdasarkan id dari request parameter
   const user = await Users.findOne({
     where: {
       id: req.params.id,
-    } as any,
+    } as WhereOptions<Users>,
   });
   // Validasi jika user tidak ditemukan
   if (!user) {
@@ -22,12 +23,13 @@ export const updateUser = async (
     return;
   }
 
-  const { name, email, password, confPassword, role } = req.body; //request dari body
+  // request dari body
+  const {name, email, password, confPassword, role} = req.body;
 
   // Validasi email
   if (email) {
     if (!validator.isEmail(email)) {
-      res.status(400).json({ msg: "Format Email Salah" });
+      res.status(400).json({msg: 'Format Email Salah'});
       return;
     }
 
@@ -47,7 +49,7 @@ export const updateUser = async (
   // Validasi email jika mengubah password
   let hashPassword;
   const salt = await bcrypt.genSalt();
-  if (typeof password !== "undefined" && password !== null && password !== "") {
+  if (typeof password !== 'undefined' && password !== null && password !== '') {
     hashPassword = await bcrypt.hash(password, salt);
   } else {
     hashPassword = user.password;
@@ -56,7 +58,7 @@ export const updateUser = async (
   // Validasi password dan confirm password
   if (password !== confPassword) {
     res.status(400).json({
-      msg: "Password dan Confirm Password Berbeda",
+      msg: 'Password dan Confirm Password Berbeda',
     });
     return;
   }
@@ -72,8 +74,8 @@ export const updateUser = async (
       {
         where: {
           id: user.id,
-        } as any,
-      }
+        } as WhereOptions<Users>,
+      },
     );
     // respond status Updated
     res.status(200).json({
@@ -83,3 +85,4 @@ export const updateUser = async (
     console.log(error);
   }
 };
+

@@ -1,22 +1,23 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
-import db from "../config/db";
+import {Model, DataTypes} from 'sequelize';
+import db from '../config/db';
 
 // Mendefinisikan atribut yang dimiliki oleh model user
 interface UserAttributes {
   name: string;
   email: string;
   password: string;
-  role: "super admin" | "admin";
+  role: 'super admin' | 'admin';
   refresh_token?: string | null;
 }
 
-// buat kelas untuk mewarisi model<UserAttributes> lalu implementasikan UserAttributes
+// buat kelas untuk mewarisi model<UserAttributes>
+// lalu implementasikan UserAttributes
 class Users extends Model<UserAttributes> implements UserAttributes {
-  public readonly id!: Number;
+  public readonly id!: number;
   public name!: string;
   public email!: string;
   public password!: string;
-  public role!: "super admin" | "admin";
+  public role!: 'super admin' | 'admin';
   public refresh_token?: string | null;
 
   public readonly createdAt!: Date;
@@ -51,7 +52,8 @@ Users.init(
       },
     },
     role: {
-      type: DataTypes.ENUM("super admin", "admin"),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.ENUM('super admin', 'admin'),
       allowNull: false,
       validate: {
         notEmpty: true,
@@ -63,9 +65,10 @@ Users.init(
   },
   {
     sequelize: db,
-    modelName: "users",
+    modelName: 'users',
     freezeTableName: true,
-  }
+  },
 );
 
 export default Users;
+

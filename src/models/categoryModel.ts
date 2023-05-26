@@ -1,16 +1,19 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
-import db from "../config/db";
+/* eslint-disable brace-style */
+import {Model, DataTypes} from 'sequelize';
+import db from '../config/db';
 
 // Mendefinisikan atribut yang dimiliki oleh model category
 interface CategoriesAttributes {
   name: string;
 }
 
-// Buat kelas category yang mewarisi Model<CategoriesAttributes> lalu implementasikan CategoriesAttributes
+// Buat kelas category yang mewarisi Model<CategoriesAttributes>
+// lalu implementasikan CategoriesAttributes
 class Categories
   extends Model<CategoriesAttributes>
   implements CategoriesAttributes
 {
+  public readonly id!: number;
   public name!: string;
 
   public readonly createdAt!: Date;
@@ -28,7 +31,8 @@ Categories.init(
       },
     },
   },
-  { sequelize: db, modelName: "Categories", freezeTableName: true }
+  {sequelize: db, modelName: 'Categories', freezeTableName: true},
 );
 
 export default Categories;
+

@@ -1,19 +1,20 @@
-import { Request, Response } from "express";
-import Users from "../../models/userModel";
-import bcrypt from "bcrypt";
-import validator from "validator";
+import {Request, Response} from 'express';
+import Users from '../../models/userModel';
+import bcrypt from 'bcrypt';
+import validator from 'validator';
 
 // Fungsi registrasi user baru
 export const createUser = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
-  const { name, email, password, confPassword, role } = req.body; // request from body atau dari luar
+  const {name, email, password, confPassword, role} = req.body;
+  // request from body atau dari luar
 
   // Validasi format email
   if (email) {
     if (!validator.isEmail(email)) {
-      res.status(400).json({ msg: "Format Email Salah" });
+      res.status(400).json({msg: 'Format Email Salah'});
       return;
     }
   }
@@ -25,20 +26,20 @@ export const createUser = async (
     },
   });
   if (cekEmail) {
-    res.status(400).json({ msg: "Email Sudah Digunakan" });
+    res.status(400).json({msg: 'Email Sudah Digunakan'});
     return;
   }
 
   // Validasi password
   if (password !== confPassword) {
-    res.status(400).json({ msg: "Password dan Confirm Password Berbeda" });
+    res.status(400).json({msg: 'Password dan Confirm Password Berbeda'});
     return;
   }
 
   // validasi role
-  if (role !== "super admin" && role !== "admin") {
+  if (role !== 'super admin' && role !== 'admin') {
     res.status(400).json({
-      msg: "Nama role harus super admin atau admin",
+      msg: 'Nama role harus super admin atau admin',
     });
     return;
   }
@@ -55,9 +56,10 @@ export const createUser = async (
       password: hashPassword,
       role: role,
     });
-    res.json({ msg: "Registrasi Berhasil" });
+    res.json({msg: 'Registrasi Berhasil'});
   } catch (error) {
     console.log(error);
-    res.json({ msg: error });
+    res.json({msg: error});
   }
 };
+

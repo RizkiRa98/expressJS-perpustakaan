@@ -1,5 +1,5 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
-import db from "../config/db";
+import {Model, DataTypes} from 'sequelize';
+import db from '../config/db';
 
 // Mendefinisikan atribut yang dimiliki oleh model member
 interface MemberAttributes {
@@ -8,8 +8,10 @@ interface MemberAttributes {
   phone: string;
 }
 
-//Buat kelas book yang mewarisi Model<MemberAttributes> lalu implementasikan MemberAttributes
+// Buat kelas book yang mewarisi Model<MemberAttributes>
+// lalu implementasikan MemberAttributes
 class Member extends Model<MemberAttributes> implements MemberAttributes {
+  public readonly id!: number;
   public name!: string;
   public email!: string;
   public phone!: string;
@@ -49,9 +51,10 @@ Member.init(
   },
   {
     sequelize: db,
-    modelName: "member",
+    modelName: 'member',
     freezeTableName: true,
-  }
+  },
 );
 
 export default Member;
+

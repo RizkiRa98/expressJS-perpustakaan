@@ -1,6 +1,7 @@
-import { Sequelize, Model, DataTypes } from "sequelize";
-import db from "../config/db";
-import Member from "./memberModel";
+/* eslint-disable brace-style */
+import {Model, DataTypes} from 'sequelize';
+import db from '../config/db';
+import Member from './memberModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model borrowing
 interface BorrowingAttributes {
@@ -8,23 +9,25 @@ interface BorrowingAttributes {
   booksId: number;
   borrow_at: Date;
   return_at?: Date | null;
-  max_return: Date;
+  max_return?: Date;
   charge?: string | null;
-  status: "returned" | "not returned";
+  status: 'returned' | 'not returned';
 }
 
-// Buat kelas Borrowing yang mewarisi Model<BorrowingAttributes> lalu implementasikan BorrowingAttributes
+// Buat kelas Borrowing yang mewarisi Model<BorrowingAttributes>
+// lalu implementasikan BorrowingAttributes
 class Borrowing
   extends Model<BorrowingAttributes>
   implements BorrowingAttributes
 {
+  public readonly id!: number;
   public memberId!: number;
   public booksId!: number;
   public borrow_at!: Date;
   public return_at?: Date | null;
-  public max_return!: Date;
+  public max_return?: Date;
   public charge?: string | null;
-  public status!: "returned" | "not returned";
+  public status!: 'returned' | 'not returned';
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
@@ -74,19 +77,21 @@ Borrowing.init(
       },
     },
     status: {
-      type: DataTypes.ENUM("returned", "not returned"),
+      // eslint-disable-next-line new-cap
+      type: DataTypes.ENUM('returned', 'not returned'),
       allowNull: false,
       validate: {
         notEmpty: true,
       },
     },
   },
-  { sequelize: db, modelName: "borrowing", freezeTableName: true }
+  {sequelize: db, modelName: 'borrowing', freezeTableName: true},
 );
 
 // // Menghubungkan tabel borrowing dengan member
-Member.hasOne(Borrowing, { foreignKey: "memberId" });
+Member.hasOne(Borrowing, {foreignKey: 'memberId'});
 
-Borrowing.belongsTo(Member, { foreignKey: "memberId" });
+Borrowing.belongsTo(Member, {foreignKey: 'memberId'});
 
 export default Borrowing;
+

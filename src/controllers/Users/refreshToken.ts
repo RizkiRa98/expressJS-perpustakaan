@@ -1,11 +1,12 @@
-import { Request, Response } from "express";
-import Users from "../../models/userModel";
-import jwt, { VerifyErrors } from "jsonwebtoken";
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
+import {Request, Response} from 'express';
+import Users from '../../models/userModel';
+import jwt from 'jsonwebtoken';
 
 // membuat fungsi untuk refresh token
 export const refreshToken = async (
   req: Request,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   try {
     // Mengambil value yang di set pada cookie
@@ -24,9 +25,9 @@ export const refreshToken = async (
       },
     });
 
-    // Jika token yang dikirim dari client tidak sesuai dengan yang ada di database
+    // Jika token yang dikirim dari client tidak sesuai
     if (!user[0]) {
-      res.sendStatus(403); //Forbidden
+      res.sendStatus(403); // Forbidden
       return;
     }
 
@@ -34,10 +35,10 @@ export const refreshToken = async (
     jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET!,
-      (err: any, decoded: any) => {
+      (err: unknown) => {
         // Jika terdapat error
         if (err) {
-          return res.sendStatus(403); //Forbidden
+          return res.sendStatus(403); // Forbidden
         }
 
         // Jika tidak Error ambil value id, name, email, role
@@ -46,14 +47,15 @@ export const refreshToken = async (
         const email = user[0].email;
         const role = user[0].role;
         const accessToken = jwt.sign(
-          { userId, name, email, role },
+          {userId, name, email, role},
           process.env.ACCESS_TOKEN_SECRET!,
-          { expiresIn: "15s" }
+          {expiresIn: '15s'},
         );
-        res.json({ accessToken });
-      }
+        res.json({accessToken});
+      },
     );
   } catch (error) {
     console.log(error);
   }
 };
+
