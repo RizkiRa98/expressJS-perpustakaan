@@ -82,7 +82,7 @@ export const addBorrowing = async (
     const maxReturnDate = new Date(
       borrowDate.getTime() + 7 * 24 * 60 * 60 * 1000,
     );
-    console.log('borrowAt:', borrow_at);
+
     // add borrowing
     const addBorrowing = await Borrowing.create({
       memberId: memberId,

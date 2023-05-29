@@ -56,7 +56,7 @@ export const createUser = async (
       password: hashPassword,
       role: role,
     });
-    res.json({msg: 'Registrasi Berhasil'});
+    res.status(200).json({msg: 'Registrasi Berhasil'});
   } catch (error) {
     console.log(error);
     res.json({msg: error});

@@ -32,7 +32,7 @@ export const getUserById = async (
         msg: 'User tidak ditemukan',
       });
     } else {
-      res.json(users);
+      res.status(200).json(users);
     }
   } catch (error) {
     console.log(error);
