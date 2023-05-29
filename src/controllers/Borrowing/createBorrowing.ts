@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import {Request, Response} from 'express';
 import Books from '../../models/booksModel';
 import Borrowing from '../../models/borrowingModel';
@@ -9,7 +10,7 @@ export const addBorrowing = async (
   req: Request,
   res: Response,
 ): Promise<void> => {
-  const {memberId, booksId, borrowAt, status} = req.body;
+  const {memberId, booksId, borrow_at, status} = req.body;
 
   // Validasi jika member dengan status not_returned tidak bisa meminjam
   const cekStatus = await Borrowing.findOne({
@@ -77,20 +78,16 @@ export const addBorrowing = async (
   // add borrowing
   try {
     // Max return otomatis menjadi 7 hari setelah borrow_at
-    const borrowDate = new Date(borrowAt);
-    if (isNaN(borrowDate.getTime())) {
-      res.status(400).json({msg: 'Format tanggal tidak valid'});
-      return;
-    }
+    const borrowDate = new Date(borrow_at);
     const maxReturnDate = new Date(
       borrowDate.getTime() + 7 * 24 * 60 * 60 * 1000,
     );
-
+    console.log('borrowAt:', borrow_at);
     // add borrowing
     const addBorrowing = await Borrowing.create({
       memberId: memberId,
       booksId: booksId,
-      borrow_at: borrowAt,
+      borrow_at: borrow_at,
       max_return: maxReturnDate.toISOString().split('T')[0],
       status: status,
     });

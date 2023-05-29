@@ -7,9 +7,9 @@ import Member from './memberModel';
 interface BorrowingAttributes {
   memberId: number;
   booksId: number;
-  borrow_at: Date;
-  return_at?: Date | null;
-  max_return?: Date;
+  borrow_at: Date | string;
+  return_at?: Date | null | string;
+  max_return?: Date | string;
   charge?: string | null;
   status: 'returned' | 'not returned';
 }
@@ -23,9 +23,9 @@ class Borrowing
   public readonly id!: number;
   public memberId!: number;
   public booksId!: number;
-  public borrow_at!: Date;
-  public return_at?: Date | null;
-  public max_return?: Date;
+  public borrow_at!: Date | string;
+  public return_at?: Date | null | string;
+  public max_return?: Date | string;
   public charge?: string | null;
   public status!: 'returned' | 'not returned';
 

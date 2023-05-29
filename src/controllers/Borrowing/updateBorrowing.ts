@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 /* eslint-disable operator-linebreak */
 import {Request, Response} from 'express';
 import Books from '../../models/booksModel';
@@ -25,7 +26,7 @@ export const updateBorrowing = async (
     return;
   }
 
-  let {memberId, booksId, borrowAt, returnAt, status} = req.body;
+  let {memberId, booksId, borrow_at, return_at, status} = req.body;
 
   // Cek member
   const cekMember = await Member.findOne({
@@ -65,14 +66,14 @@ export const updateBorrowing = async (
   // add borrowing
   try {
     // Max return otomatis menjadi 7 setelah borrow_at
-    const borrowDate = new Date(borrowAt);
+    const borrowDate = new Date(borrow_at);
     const maxReturnDate = new Date(
       borrowDate.getTime() + 7 * 24 * 60 * 60 * 1000,
     );
 
     // Perhitungan denda
-    const maxReturn = new Date(borrowing.max_return);
-    const returnDate = new Date(returnAt);
+    const maxReturn = new Date(borrowing.max_return as Date);
+    const returnDate = new Date(return_at);
     const dayDifference = Math.floor(
       (returnDate.getTime() - maxReturn.getTime()) / (1000 * 60 * 60 * 24),
     );
@@ -86,7 +87,7 @@ export const updateBorrowing = async (
     const chargeString = charge.toString();
 
     // Jika return_at di update lakukan update pada tabel buku juga
-    if (returnAt) {
+    if (return_at) {
       status = 'returned';
       // cek jika ada borrowing Id pada books
       // maka ubah borrowingId menjadi null dan status books menjadi available
@@ -117,9 +118,9 @@ export const updateBorrowing = async (
       {
         memberId: memberId,
         booksId: booksId,
-        borrow_at: borrowAt,
-        return_at: returnAt,
-        max_return: borrowAt
+        borrow_at: borrow_at,
+        return_at: return_at,
+        max_return: borrow_at
           ? maxReturnDate.toISOString().split('T')[0]
           : borrowing.max_return,
         charge: chargeString,
