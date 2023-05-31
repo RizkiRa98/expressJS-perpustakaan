@@ -16,9 +16,7 @@ export const deleteMember = async (
 
     // Validasi jika member dengan id yang di request tidak ditemukan
     if (!members) {
-      res
-        .status(404)
-        .json({msg: `Member dengan id ${req.params.id} tidak ditemukan`});
+      res.json({msg: `Member dengan id ${req.params.id} tidak ditemukan`});
       return;
     }
 
@@ -30,13 +28,11 @@ export const deleteMember = async (
     });
 
     // Respond status ok
-    res
-      .status(200)
-      .json({msg: `Member dengan Id ${req.params.id} berhasil dihapus`});
+    res.json({msg: `Member dengan Id ${req.params.id} berhasil dihapus`});
   } catch (error) {
     console.log(error);
     // Jika terjadi error pada try
-    res.status(400).json({msg: error});
+    res.json({msg: error});
   }
 };
 

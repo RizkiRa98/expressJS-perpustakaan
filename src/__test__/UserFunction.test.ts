@@ -235,7 +235,7 @@ describe('getUserById', () => {
   });
 
   // Case 2 jika user tidak ada
-  it('should return status 404 it user is not found', async () => {
+  it('should return status 404 if user is not found', async () => {
     Users.findOne = jest.fn().mockResolvedValue(null);
 
     await getUserById(req, res);
