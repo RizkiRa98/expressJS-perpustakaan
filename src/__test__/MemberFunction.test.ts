@@ -64,7 +64,7 @@ describe('getMember', () => {
 // End get all member
 
 // Get member by id
-describe('getMemberId', () => {
+describe('getMemberById', () => {
   let req: Request;
   let res: Response;
 

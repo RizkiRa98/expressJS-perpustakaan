@@ -425,8 +425,7 @@ describe('updateUser', () => {
       password: 'password',
       role: 'admin',
     };
-    const updatedUser = {
-      id: '1',
+    req.body = {
       name: 'Updated Name',
       email: 'updated-email@example.com',
       password: 'password',
@@ -436,12 +435,7 @@ describe('updateUser', () => {
     // Mock Users.findOne to return user data
     (Users.findOne as jest.Mock).mockResolvedValue(user);
 
-    // Request body
-    req.body.name = updatedUser.name;
-    req.body.email = updatedUser.email;
-    req.body.password = 'new-password';
-    req.body.confPassword = 'new-password';
-    req.body.role = updatedUser.role;
+    (Users.update as jest.Mock).mockResolvedValue([1]);
 
     await updateUser(req, res);
 
@@ -449,7 +443,19 @@ describe('updateUser', () => {
     expect(Users.findOne).toHaveBeenCalledWith({
       where: {id: req.params.id} as WhereOptions<Users>,
     });
-    expect(Users.update).toHaveBeenCalled();
+    expect(Users.update).toHaveBeenCalledWith(
+      {
+        name: req.body.name,
+        email: req.body.email,
+        password: req.body.password,
+        role: req.body.role,
+      },
+      {
+        where: {
+          id: user.id,
+        },
+      },
+    );
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       msg: `User dengan id ${req.params.id} berhasil di update`,
