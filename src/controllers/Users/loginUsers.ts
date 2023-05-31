@@ -68,7 +68,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
     });
     res.json({accessToken});
   } catch (error) {
-    res.status(404).json({msg: 'User tidak ditemukan!'});
+    res.status(404);
   }
 };
 
