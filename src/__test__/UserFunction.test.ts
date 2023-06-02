@@ -12,6 +12,7 @@ import {WhereOptions} from 'sequelize';
 
 // Mock lokasi models
 jest.mock('../models/userModel', () => ({
+  findAll: jest.fn(),
   findOne: jest.fn(),
   create: jest.fn(),
   destroy: jest.fn(),
@@ -346,9 +347,9 @@ describe('updateUser', () => {
     } as unknown as Response;
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  // afterEach(() => {
+  //   jest.clearAllMocks();
+  // });
 
   // Case 1 Jika user yang di request tidak ada
   it('should return status 404 and "Users not found" message if user is not found', async () => {
@@ -417,45 +418,58 @@ describe('updateUser', () => {
 
   // Case 4 update user berhasil
   it('should update user and return status 200 and success message', async () => {
-    // jest.spyOn(Users, 'update');
-    const user = {
+    // Mock user yang digunakan
+    const mockUser = {
       id: '1',
       name: 'John Doe',
-      email: 'john@example.com',
-      password: 'password',
+      email: 'john.doe@example.com',
+      password: 'old-hashed-password',
       role: 'admin',
-    };
+    } as unknown as Users;
+
+    // Mock menggunakan spyOn
+    jest.spyOn(Users, 'findOne').mockResolvedValueOnce(mockUser);
+    jest.spyOn(Users, 'update').mockResolvedValueOnce([1]);
+    jest.spyOn(validator, 'isEmail').mockReturnValue(true);
+    jest
+      .spyOn(bcrypt, 'genSalt')
+      .mockImplementation(() => Promise.resolve('salt'));
+    jest
+      .spyOn(bcrypt, 'hash')
+      .mockImplementation(() => Promise.resolve('new-hashed-password'));
+
+    req.params = {id: '1'};
     req.body = {
-      name: 'Updated Name',
-      email: 'updated-email@example.com',
-      password: 'password',
+      name: 'John Doe',
+      email: 'john.doe@example.com',
+      password: 'new-password',
+      confPassword: 'new-password',
       role: 'admin',
     };
-
-    // Mock Users.findOne to return user data
-    (Users.findOne as jest.Mock).mockResolvedValue(user);
-
-    (Users.update as jest.Mock).mockResolvedValue([1]);
 
     await updateUser(req, res);
 
-    // Expectations
+    // Ekspetasi yang diharapkan
     expect(Users.findOne).toHaveBeenCalledWith({
-      where: {id: req.params.id} as WhereOptions<Users>,
+      where: {
+        id: '1',
+      } as WhereOptions<Users>,
     });
+
     expect(Users.update).toHaveBeenCalledWith(
       {
-        name: req.body.name,
-        email: req.body.email,
-        password: req.body.password,
-        role: req.body.role,
+        name: 'John Doe',
+        email: 'john.doe@example.com',
+        password: 'new-hashed-password',
+        role: 'admin',
       },
       {
         where: {
-          id: user.id,
-        },
+          id: '1',
+        } as WhereOptions<Users>,
       },
     );
+
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       msg: `User dengan id ${req.params.id} berhasil di update`,
