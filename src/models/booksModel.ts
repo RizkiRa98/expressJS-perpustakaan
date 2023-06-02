@@ -85,11 +85,11 @@ Books.init(
 );
 
 // Menghubungkan tabel books dengan category
-Categories.hasMany(Books, {foreignKey: 'categoryId'});
-Books.belongsTo(Categories, {foreignKey: 'categoryId'});
+Categories.hasMany(Books, {as: 'Books', foreignKey: 'categoryId'});
+// Books.belongsTo(Categories, {as: 'Categories', foreignKey: 'categoryId'});
 
-Borrowing.hasMany(Books, {foreignKey: 'borrowingId'});
-Books.belongsTo(Borrowing, {foreignKey: 'id'});
+Borrowing.hasMany(Books, {as: 'Books', foreignKey: 'borrowingId'});
+// Books.belongsTo(Borrowing, {as: 'Borrowing', foreignKey: 'id'});
 
 export default Books;
 

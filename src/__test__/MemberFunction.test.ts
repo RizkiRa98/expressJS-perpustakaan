@@ -239,7 +239,7 @@ describe('deleteMember', () => {
   });
 
   // Case 1 return semua data member
-  it('should delete user and return success message', async () => {
+  it('should delete member and return success message', async () => {
     const member = {
       id: 1,
     };
@@ -265,7 +265,7 @@ describe('deleteMember', () => {
 
   // Case 2 jika member tidak ditemukan
   it('should send 404 status and message if user doesnt exist', async () => {
-    // Member findOn dengan value null
+    // Member findOne dengan value null
     (Member.findOne as jest.Mock).mockResolvedValue(null);
 
     await deleteMember(req, res);
@@ -356,6 +356,114 @@ describe('updateMember', () => {
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       msg: `Member dengan id ${req.params.id} berhasil di update`,
+    });
+  });
+
+  // Case 2 jika member tidak ada
+  it('should return message if member is not found', async () => {
+    // Mock findOne member dengan value null
+    (Member.findOne as jest.Mock).mockResolvedValue(null);
+
+    await updateMember(req, res);
+
+    expect(Member.findOne).toHaveBeenCalledWith({
+      where: {
+        id: req.params.id,
+      } as WhereOptions<Member>,
+    });
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: `Member dengan id ${req.params.id} tidak ditemukan`,
+    });
+  });
+
+  // Case 3 jika format email tidak valid
+  it('should return status 400 and message email format is wrong', async () => {
+    // Mock findOne member
+    (Member.findOne as jest.Mock).mockResolvedValue({
+      id: '1',
+    });
+
+    jest.spyOn(validator, 'isEmail').mockReturnValueOnce(false);
+    req.body = {
+      email: 'invalid-email',
+    };
+
+    await updateMember(req, res);
+
+    expect(Member.findOne).toHaveBeenCalledWith({
+      where: {
+        id: req.params.id,
+      } as WhereOptions<Member>,
+    });
+    expect(validator.isEmail).toHaveBeenCalledWith(req.body.email);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: 'Format Email Salah',
+    });
+  });
+
+  // Case 4 jika email sudah digunakan
+  it('should return if email is already used', async () => {
+    // Mock data member
+    const mockMember = {
+      email: 'existing-email@example.com',
+    };
+
+    // Mock findOne member
+    (Member.findOne as jest.Mock).mockResolvedValue(mockMember.email);
+
+    req.body = {
+      email: 'existing-email@example.com',
+    };
+
+    await updateMember(req, res);
+
+    expect(Member.findOne).toHaveBeenCalledWith({
+      where: {
+        id: req.params.id,
+      } as WhereOptions<Member>,
+    });
+    expect(Member.findOne).toHaveBeenCalledWith({
+      where: {
+        email: req.body.email,
+      },
+    });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: `Email ${req.body.email} sudah digunakan`,
+    });
+  });
+
+  // Case 5 jika format no hp salah
+  it('should return if phone format is invalid', async () => {
+    const mockMember = {
+      phone: '1234567890',
+    };
+
+    // Mock findOne member
+    (Member.findOne as jest.Mock).mockResolvedValue(mockMember.phone);
+
+    jest.spyOn(validator, 'isMobilePhone').mockReturnValueOnce(false);
+
+    req.body = {
+      phone: mockMember.phone,
+    };
+
+    await updateMember(req, res);
+
+    expect(Member.findOne).toHaveBeenCalledWith({
+      where: {
+        id: req.params.id,
+      } as WhereOptions<Member>,
+    });
+    expect(validator.isMobilePhone).toHaveBeenCalledWith(
+      req.body.phone,
+      'id-ID',
+    );
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: 'Format Nomor Hp Salah! Gunakan format Nomor Indonesia (08)',
     });
   });
 });

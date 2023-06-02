@@ -14,7 +14,8 @@ export const addBooks = async (req: Request, res: Response): Promise<void> => {
     },
   });
   if (cekBooks) {
-    res.status(400).json({msg: 'Buku sudah ada'});
+    res.json({msg: 'Buku sudah ada'});
+
     return;
   }
 

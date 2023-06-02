@@ -64,7 +64,7 @@ export const getBookById = async (
       ],
     });
     if (!book) {
-      res.status(400).json({
+      res.status(404).json({
         msg: 'Buku tidak ditemukan',
       });
       return;
