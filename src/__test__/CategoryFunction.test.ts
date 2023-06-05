@@ -9,13 +9,7 @@ import {addCategory} from '../controllers/Category/createCategory';
 import {deleteCategory} from '../controllers/Category/deleteCategory';
 import {updateCategory} from '../controllers/Category/updateCategory';
 
-jest.mock('../models/categoryModel', () => ({
-  findAll: jest.fn(),
-  findOne: jest.fn(),
-  create: jest.fn(),
-  destroy: jest.fn(),
-  update: jest.fn(),
-}));
+jest.mock('../models/categoryModel');
 
 // Function get all category
 describe('getMember', () => {
@@ -141,7 +135,7 @@ describe('createCategory', () => {
   });
 
   // Case 1 cek category jika sudah ada
-  it('should return if category is already saved', async () => {
+  it('should return if category name is already saved', async () => {
     (Categories.findOne as jest.Mock).mockReturnValueOnce([]);
 
     req.body = {
@@ -249,6 +243,9 @@ describe('deleteMember', () => {
 describe('updateCategory', () => {
   let req: Request;
   let res: Response;
+  // membuat fungsi buatan menggunakan jest.mock
+  let findOneMock: jest.Mock;
+  let updateMock: jest.Mock;
 
   beforeEach(() => {
     req = {
@@ -259,6 +256,14 @@ describe('updateCategory', () => {
       status: jest.fn().mockReturnThis(),
       json: jest.fn(),
     } as unknown as Response;
+
+    // membuat function tiruan kosong
+    findOneMock = jest.fn();
+    updateMock = jest.fn();
+
+    // spyOn pada findOne dan update menggunakan mockImplementation
+    jest.spyOn(Categories, 'findOne').mockImplementation(findOneMock);
+    jest.spyOn(Categories, 'update').mockImplementation(updateMock);
   });
 
   afterEach(() => {
@@ -320,15 +325,15 @@ describe('updateCategory', () => {
   it('should update category and return success message', async () => {
     const category = {
       id: '1',
-      name: 'example-name',
-    } as unknown as Categories;
+      name: 'old-category-name',
+    };
     req.body = {
-      name: 'example-name1',
+      name: 'new-category-name',
     };
 
-    // (Categories.findOne as jest.Mock).mockResolvedValueOnce(category);
-    // (Categories.update as jest.Mock).mockResolvedValueOnce([1]);
-    jest.spyOn(Categories, 'findOne').mockResolvedValueOnce(category);
+    // Mock member findOne
+    (Categories.findOne as jest.Mock).mockResolvedValueOnce(category);
+
     (Categories.update as jest.Mock).mockResolvedValueOnce([1]);
 
     await updateCategory(req, res);
@@ -338,15 +343,14 @@ describe('updateCategory', () => {
         id: req.params.id,
       } as WhereOptions<Categories>,
     });
-
     expect(Categories.update).toHaveBeenCalledWith(
       {
-        name: 'example-name1',
+        name: 'new-category-name',
       },
       {
         where: {
           id: '1',
-        } as WhereOptions<Categories>,
+        },
       },
     );
     expect(res.status).toHaveBeenCalledWith(200);

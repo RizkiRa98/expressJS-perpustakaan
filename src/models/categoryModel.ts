@@ -1,6 +1,7 @@
 /* eslint-disable brace-style */
 import {Model, DataTypes} from 'sequelize';
 import db from '../config/db';
+import Books from './booksModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model category
 interface CategoriesAttributes {
@@ -31,8 +32,14 @@ Categories.init(
       },
     },
   },
-  {sequelize: db, modelName: 'Categories', freezeTableName: true},
+  {sequelize: db, modelName: 'categories', freezeTableName: true},
 );
 
+// Categories.hasMany(Books, {
+//   sourceKey: 'id',
+//   as: 'Books',
+//   foreignKey: 'categoryId',
+// });
+// Books.belongsTo(Categories, {foreignKey: 'id', as: 'Categories'});
 export default Categories;
 

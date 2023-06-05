@@ -1,7 +1,7 @@
 import {Model, DataTypes} from 'sequelize';
 import db from '../config/db';
-import Categories from './categoryModel';
 import Borrowing from './borrowingModel';
+import Categories from './categoryModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model book
 interface BookAttributes {
@@ -85,11 +85,15 @@ Books.init(
 );
 
 // Menghubungkan tabel books dengan category
-Categories.hasMany(Books, {as: 'Books', foreignKey: 'categoryId'});
-// Books.belongsTo(Categories, {as: 'Categories', foreignKey: 'categoryId'});
+Categories.hasMany(Books, {
+  sourceKey: 'id',
+  as: 'Books',
+  foreignKey: 'categoryId',
+});
+Books.belongsTo(Categories, {foreignKey: 'id', as: 'Categories'});
 
 Borrowing.hasMany(Books, {as: 'Books', foreignKey: 'borrowingId'});
-// Books.belongsTo(Borrowing, {as: 'Borrowing', foreignKey: 'id'});
+Books.belongsTo(Borrowing, {as: 'Borrowing', foreignKey: 'id'});
 
 export default Books;
 
