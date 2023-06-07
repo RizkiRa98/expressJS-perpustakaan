@@ -84,7 +84,8 @@ export const addBorrowing = async (
     );
 
     // add borrowing
-    const addBorrowing = await Borrowing.create({
+    // const addBorrowing =
+    await Borrowing.create({
       memberId: memberId,
       booksId: booksId,
       borrow_at: borrow_at,
@@ -93,29 +94,29 @@ export const addBorrowing = async (
     });
 
     // ambil id dari addBorrowing
-    const borrowingId = addBorrowing.id;
+    // const borrowingId = addBorrowing.id;
 
     // cek borrowing
-    const cekBorrowing = await Books.findOne({
-      where: {
-        id: booksId,
-        borrowingId: null,
-      } as WhereOptions<Books>,
-    });
+    // const cekBorrowing = await Books.findOne({
+    //   where: {
+    //     id: booksId,
+    //     borrowingId: null,
+    //   } as WhereOptions<Books>,
+    // });
 
-    if (cekBorrowing) {
-      await Books.update(
-        {
-          borrowingId: borrowingId,
-          status: 'unavailable',
-        },
-        {
-          where: {
-            id: booksId,
-          } as WhereOptions<Books>,
-        },
-      );
-    }
+    // if (cekBorrowing) {
+    //   await Books.update(
+    //     {
+    //       borrowingId: borrowingId,
+    //       status: 'unavailable',
+    //     },
+    //     {
+    //       where: {
+    //         id: booksId,
+    //       } as WhereOptions<Books>,
+    //     },
+    //   );
+    // }
 
     res.json({msg: 'Data peminjam sudah ditambahkan'});
   } catch (error) {

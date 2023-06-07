@@ -29,11 +29,11 @@ dotenv.config();
 const connectDb = async () => {
   try {
     await db.authenticate();
-    // await Member.sync();
-    // await Borrowing.sync();
-    // await Categories.sync();
-    // await Books.sync();
-    // await Users.sync();
+    // await Member.sync({force: true});
+    // await Borrowing.sync({force: true});
+    // await Categories.sync({force: true});
+    // await Books.sync({force: true});
+    // await Users.sync({force: true});
     console.log('Database Connected');
   } catch (error) {
     console.log(error);

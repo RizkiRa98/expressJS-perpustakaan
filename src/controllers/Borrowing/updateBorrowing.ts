@@ -20,7 +20,7 @@ export const updateBorrowing = async (
 
   // Validasi jika id tidak ada
   if (!borrowing) {
-    res.status(400).json({
+    res.status(404).json({
       msg: `Peminjaman dengan id ${req.params.id} tidak ditemukan`,
     });
     return;
@@ -92,25 +92,25 @@ export const updateBorrowing = async (
       // cek jika ada borrowing Id pada books
       // maka ubah borrowingId menjadi null dan status books menjadi available
 
-      const cekBorrowingId = await Books.findOne({
-        where: {
-          borrowingId: req.params.id,
-        },
-      });
+      // const cekBorrowingId = await Books.findOne({
+      //   where: {
+      //     borrowingId: req.params.id,
+      //   },
+      // });
 
-      if (cekBorrowingId) {
-        await Books.update(
-          {
-            borrowingId: null,
-            status: 'available',
-          },
-          {
-            where: {
-              id: borrowing.booksId,
-            } as WhereOptions<Books>,
-          },
-        );
-      }
+      // if (cekBorrowingId) {
+      //   await Books.update(
+      //     {
+      //       borrowingId: null,
+      //       status: 'available',
+      //     },
+      //     {
+      //       where: {
+      //         id: borrowing.booksId,
+      //       } as WhereOptions<Books>,
+      //     },
+      //   );
+      // }
     }
 
     // Update borrowing

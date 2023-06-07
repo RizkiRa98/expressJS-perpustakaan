@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {Model, DataTypes} from 'sequelize';
 import db from '../config/db';
 import Borrowing from './borrowingModel';
@@ -26,6 +27,7 @@ class Books extends Model<BookAttributes> implements BookAttributes {
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+  static associate: (models: any) => void;
 }
 
 Books.init(
@@ -83,8 +85,12 @@ Books.init(
     freezeTableName: true,
   },
 );
+// Categories.hasMany(Books, {foreignKey: 'categoryId'});
+// Borrowing.hasMany(Books, {foreignKey: 'borrowingId'});
+// Books.belongsTo(Categories, {as: 'categories', foreignKey: 'categoryId'});
 
-// Menghubungkan tabel books dengan category
+// Books.belongsTo(Borrowing, {foreignKey: 'borrowingId'});
+
 Categories.hasMany(Books, {
   sourceKey: 'id',
   as: 'Books',

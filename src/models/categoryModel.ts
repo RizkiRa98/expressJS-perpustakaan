@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable brace-style */
-import {Model, DataTypes} from 'sequelize';
+import {Model, DataTypes, Association} from 'sequelize';
 import db from '../config/db';
 import Books from './booksModel';
 
@@ -19,6 +20,11 @@ class Categories
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
+
+  public static associations: {
+    category: Association<Books, Categories>;
+  };
+  static associate: (models: any) => void;
 }
 
 Categories.init(
@@ -35,11 +41,5 @@ Categories.init(
   {sequelize: db, modelName: 'categories', freezeTableName: true},
 );
 
-// Categories.hasMany(Books, {
-//   sourceKey: 'id',
-//   as: 'Books',
-//   foreignKey: 'categoryId',
-// });
-// Books.belongsTo(Categories, {foreignKey: 'id', as: 'Categories'});
 export default Categories;
 

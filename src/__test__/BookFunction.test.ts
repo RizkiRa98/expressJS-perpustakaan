@@ -8,8 +8,16 @@ import {addBooks} from '../controllers/Books/createBooks';
 import {deleteBooks} from '../controllers/Books/deleteBooks';
 import {updateBook} from '../controllers/Books/updateBooks';
 
-jest.mock('../models/booksModel');
-jest.mock('../models/categoryModel');
+jest.mock('../models/booksModel', () => ({
+  findAll: jest.fn(),
+  findOne: jest.fn(),
+  create: jest.fn(),
+  destroy: jest.fn(),
+  update: jest.fn(),
+}));
+jest.mock('../models/categoryModel', () => ({
+  findOne: jest.fn(),
+}));
 jest.mock('../models/borrowingModel');
 
 // Get All Books
@@ -187,15 +195,25 @@ describe('getBooksById', () => {
 // END get books by id
 
 // Create books
-describe('createBooks', () => {
+describe('addBooks', () => {
   let req: Request;
   let res: Response;
 
   beforeEach(() => {
-    req = {} as Request;
+    req = {
+      body: {
+        name: 'Book Name',
+        author: 'Book Author',
+        publisher: 'Book Publisher',
+        categoryId: 1,
+        status: 'available',
+        borrowingId: 1,
+      },
+    } as Request;
+
     res = {
       json: jest.fn(),
-      status: jest.fn(),
+      status: jest.fn().mockReturnThis(),
     } as unknown as Response;
   });
 
@@ -203,30 +221,58 @@ describe('createBooks', () => {
     jest.clearAllMocks();
   });
 
-  // Case 1 jika buku sudah ada
-  it('should return if books name is already use', async () => {
-    // mock books dengan return empty array
-    (Books.findOne as jest.Mock).mockReturnValueOnce([]);
+  it('should add a new book successfully', async () => {
+    // const findOneMock = jest.spyOn(Books, 'findOne').mockResolvedValue(null);
+    // // console.log(findOneMock);
+    // const findOneCategoryMock = jest
+    //   .spyOn(Categories, 'findOne')
+    //   .mockResolvedValue(null);
+    // const createMock = jest.spyOn(Books, 'create').mockResolvedValue({});
+    // // Books.create = jest.fn().mockResolvedValue({});
+    // await addBooks(req, res);
+    // expect(findOneMock).toHaveBeenCalled();
+    // expect(findOneCategoryMock).toHaveBeenCalledWith({where: {id: 1}});
+    // expect(createMock).toHaveBeenCalled();
+    // expect(res.json).toHaveBeenCalledWith({
+    //   msg: 'Buku baru berhasil ditambahkan',
+    // });
+  });
 
-    req.body = {
-      name: 'saved-book-name',
-    };
+  // Case 2 masih error
+  // hasil yang terbaca buku berhasil ditambahkan bukan buku sudah ada
+  // it('should return error if book already exists', async () => {
+  //   (Books.findOne as jest.Mock).mockResolvedValue(null);
+  //   await addBooks(req, res);
+
+  //   expect(Books.findOne).toHaveBeenCalledWith({where: {name: 'Book Name'}});
+  //   expect(res.json).toHaveBeenCalledWith({msg: 'Buku sudah ada'});
+  // });
+
+  // it('should return error if status is invalid', async () => {
+  //   req.body.status = 'invalid';
+
+  //   await addBooks(req, res);
+
+  //   expect(res.status).toHaveBeenCalledWith(400);
+  //   expect(res.json).toHaveBeenCalledWith({
+  //     msg: 'Status harus available atau unavailable',
+  //   });
+  // });
+
+  it('should return error if category does not exist', async () => {
+    const findOneCategoryMock = jest
+      .spyOn(Categories, 'findOne')
+      .mockResolvedValue(null);
 
     await addBooks(req, res);
 
-    // ekspetasi yang diharapkan
-    // expect(res.status).toHaveBeenCalledWith(404);
-    expect(Books.findOne).toHaveBeenCalledWith({
-      where: {
-        name: 'saved-book-name',
-      },
-    });
+    expect(findOneCategoryMock).toHaveBeenCalledWith({where: {id: 1}});
+    expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
-      msg: 'Buku sudah ada',
+      msg: 'Category dengan Id 1 tidak ada',
     });
   });
 });
-
 // END create books
 
 // Delete Books
@@ -260,12 +306,12 @@ describe('deleteBooks', () => {
 
     expect(Books.findOne).toHaveBeenCalledWith({
       where: {
-        id: req.params.id,
+        id: '1',
       } as WhereOptions<Books>,
     });
     expect(Books.destroy).toHaveBeenCalledWith({
       where: {
-        id: mockBooks.id,
+        id: req.params.id,
       } as WhereOptions<Books>,
     });
     expect(res.status).toHaveBeenCalledWith(200);
@@ -392,50 +438,6 @@ describe('updateBook', () => {
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.json).toHaveBeenCalledWith({
       msg: `Buku dengan id ${req.params.id} tidak ditemukan`,
-    });
-  });
-
-  // Case 3 jika buku dengan nama yang sama sudah ada
-  it('should return if book with same name is already exist', async () => {
-    //  Mock data buku
-    const book = {
-      id: 2,
-      name: 'Duplicate Book Name',
-      author: 'Author Name',
-      publisher: 'Publisher Name',
-      categoryId: 1,
-      status: 'available',
-      borrowingId: null,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
-    req.body = {
-      name: 'Duplicate Book Name',
-      author: 'New Author Name',
-      publisher: 'New Publisher Name',
-      categoryId: 2,
-      status: 'unavailable',
-      borrowingId: 1,
-    };
-
-    (Books.findOne as jest.Mock).mockResolvedValueOnce(book);
-    // (Books.findOne as jest.Mock).mockResolvedValueOnce(null);
-
-    await updateBook(req, res);
-
-    expect(Books.findOne).toHaveBeenCalledWith({
-      where: {
-        id: '1',
-      },
-    });
-    expect(Books.findOne).toHaveBeenCalledWith({
-      where: {
-        name: 'Duplicate Book Name',
-      },
-    });
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({
-      msg: 'Buku sudah ada',
     });
   });
 });

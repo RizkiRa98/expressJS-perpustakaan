@@ -6,21 +6,8 @@ import {WhereOptions} from 'sequelize';
 // Fungsi tambah books baru
 export const addBooks = async (req: Request, res: Response): Promise<void> => {
   const {name, author, publisher, categoryId, status, borrowingId} = req.body;
-
-  // validasi jika ada buku yang sama
-  const cekBooks = await Books.findOne({
-    where: {
-      name: name,
-    },
-  });
-  if (cekBooks) {
-    res.json({msg: 'Buku sudah ada'});
-
-    return;
-  }
-
   if (status !== 'available' && status !== 'unavailable') {
-    res.status(400).json({msg: 'Status harus available atau unavailable'});
+    res.json({msg: 'Status harus available atau unavailable'});
     return;
   }
 
@@ -39,6 +26,17 @@ export const addBooks = async (req: Request, res: Response): Promise<void> => {
   }
 
   // Add Books
+  // validasi jika ada buku yang sama
+  const cekBooks = await Books.findOne({
+    where: {
+      name: name,
+    },
+  });
+  if (cekBooks) {
+    res.json({msg: 'Buku sudah ada'});
+    return;
+  }
+
   try {
     await Books.create({
       name: name,
