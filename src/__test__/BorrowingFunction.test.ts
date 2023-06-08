@@ -158,57 +158,63 @@ describe('createBorrowing', () => {
   });
 
   // Case 5 jika buku status buku not available
-  // Masih error karna belongs to harus di non aktifkan
-  // it('should return if the boos is unavailable for borrowing', async () => {
-  //   Borrowing.findOne = jest.fn().mockResolvedValueOnce(null);
-  //   Member.findOne = jest.fn().mockResolvedValueOnce({});
-  //   req.body.status = 'returned';
-  //   Books.findOne = jest.fn().mockResolvedValueOnce({status: 'unavailable'});
 
-  //   await addBorrowing(req, res);
-
-  //   expect(res.status).toHaveBeenCalledWith(400);
-  //   expect(res.json).toHaveBeenCalledWith({
-  //     msg: 'Buku belum bisa dipinjam',
-  //   });
-  // });
-
-  // Case 6 berhasil menambahkan Borrowing
-  it('should add a borrowing and update the books status', async () => {
+  it('should return if the books is unavailable for borrowing', async () => {
     Borrowing.findOne = jest.fn().mockResolvedValueOnce(null);
     Member.findOne = jest.fn().mockResolvedValueOnce({});
     req.body.status = 'returned';
-    Books.findOne = jest.fn().mockResolvedValueOnce({status: 'available'});
-    Books.update = jest.fn().mockResolvedValueOnce({});
+    Books.findOne = jest.fn().mockResolvedValueOnce({status: 'unavailable'});
 
     await addBorrowing(req, res);
 
-    expect(Borrowing.create).toHaveBeenCalledWith({
-      memberId: 'memberId',
-      booksId: 'booksId',
-      borrow_at: '2023-06-06',
-      max_return: expect.any(String),
-      status: 'returned',
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: 'Buku belum bisa dipinjam',
     });
+  });
 
-    // Di komen karena associate dimatikan dulu
-    // Kalau akftif ada error data tidak ada karena
-    // associate Books dan borrowing belum aktif
-    // expect(Books.update).toHaveBeenCalledWith(
-    //   {
-    //     borrowingId: expect.any(String),
-    //     status: 'unavailable',
-    //   },
-    //   {
-    //     where: {
-    //       id: 'booksId',
-    //     },
-    //   },
-    // );
+  // Case 6 berhasil menambahkan Borrowing
+  it('should add a borrowing and update the books status', async () => {
+    const mockCreate = jest.fn().mockResolvedValue({id: 1});
+    Books.findOne = jest.fn().mockResolvedValue({});
+    Borrowing.findOne = jest.fn().mockResolvedValue(null);
+    Member.findOne = jest.fn().mockResolvedValue({});
+    Borrowing.create = jest.fn().mockImplementation(mockCreate);
+
+    Books.update = jest.fn().mockResolvedValue([1]);
+
+    await addBorrowing(req, res);
 
     expect(res.json).toHaveBeenCalledWith({
       msg: 'Data peminjam sudah ditambahkan',
     });
+    expect(mockCreate).toHaveBeenCalledWith({
+      memberId: req.body.memberId,
+      booksId: req.body.booksId,
+      borrow_at: req.body.borrow_at,
+      max_return: expect.any(String),
+      status: req.body.status,
+    });
+    expect(Books.update).toHaveBeenCalledWith(
+      {
+        borrowingId: 1,
+        status: 'unavailable',
+      },
+      {
+        where: {
+          id: req.body.booksId,
+        },
+      },
+    );
+  });
+
+  // Case 7 jika terjadi error
+  it('should handle errors', async () => {
+    (Books.findOne as jest.Mock).mockRejectedValue('Some Error');
+
+    await addBorrowing(req, res);
+
+    expect(res.json).toHaveBeenCalledWith({msg: 'Some Error'});
   });
 });
 // END create borrowing
@@ -236,37 +242,68 @@ describe('deleteBorrowing', () => {
 
   // Case 1 jika borrowing tidak ada
   it('should return error if borrowing is not found', async () => {
-    const borrowing = {
-      id: '1',
-      booksId: 'booksId',
-    };
-    Borrowing.findOne = jest.fn().mockResolvedValueOnce(borrowing);
-    Books.findOne = jest.fn().mockResolvedValueOnce({});
+    Borrowing.findOne = jest.fn().mockResolvedValueOnce(null);
 
     await deleteBorrowing(req, res);
 
-    // expect(Books.update).toHaveBeenCalledWith(
-    //   {
-    //     borrowingId: null,
-    //     status: 'available',
-    //   },
-    //   {
-    //     where: {
-    //       id: 'booksId',
-    //     },
-    //   },
-    // );
+    expect(res.status).toHaveBeenCalledWith(404);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: `Peminjaman dengan id ${req.params.id} tidak ditemukan`,
+    });
+  });
 
-    expect(Borrowing.destroy).toHaveBeenCalledWith({
+  // Case 2 jika borrowing ada maka update status buku
+  it('should update book status if borrowingId exist', async () => {
+    Borrowing.findOne = jest.fn().mockResolvedValueOnce({id: 1, booksId: 2});
+    Books.findOne = jest.fn().mockResolvedValueOnce({
+      borrowingId: 1,
+    });
+
+    Books.update = jest.fn().mockResolvedValueOnce(1);
+    Borrowing.destroy = jest.fn().mockResolvedValueOnce(1);
+
+    await deleteBorrowing(req, res);
+
+    expect(Borrowing.findOne).toHaveBeenCalledWith({
       where: {
         id: '1',
       },
     });
-
+    expect(Books.findOne).toHaveBeenCalledWith({
+      where: {
+        borrowingId: '1',
+      },
+    });
+    expect(Books.update).toHaveBeenCalledWith(
+      {
+        borrowingId: null,
+        status: 'available',
+      },
+      {
+        where: {
+          id: 2,
+        },
+      },
+    );
+    expect(Borrowing.destroy).toHaveBeenCalledWith({
+      where: {
+        id: 1,
+      },
+    });
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
-      msg: `Peminjaman dengan Id ${req.params.id} berhasil dihapus`,
+      msg: 'Peminjaman dengan Id 1 berhasil dihapus',
     });
+  });
+
+  // case 3 jika ada error
+  it('should handle error', async () => {
+    Borrowing.findOne = jest.fn().mockRejectedValueOnce('Some error');
+
+    await deleteBorrowing(req, res);
+
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({msg: 'Some error'});
   });
 });
 // END delete borrowing
@@ -340,73 +377,105 @@ describe('updateBorrowing', () => {
   });
 
   // case 4 jika member belum mengembalikan peminjaman sebelumnya
-  // Error karena belongsTo
-  // model Books tidak termasuk dalam sequelize.Model
+  it('should return if member has not returned previous book', async () => {
+    Borrowing.findOne = jest.fn().mockResolvedValueOnce({
+      booksId: 'previous-book-id',
+      memberId: 'member-id',
+    });
+    Member.findOne = jest.fn().mockResolvedValueOnce({});
+    Books.findOne = jest.fn().mockResolvedValueOnce({});
 
-  // it('should return 400 if member has not returned books', async () => {
-  //   Borrowing.findOne = jest.fn().mockResolvedValueOnce({
-  //     booksId: 'previous-booksId',
-  //     memberId: 'previous-memberId',
-  //   });
-  //   Member.findOne = jest.fn().mockResolvedValueOnce({});
-  //   Books.findOne = jest.fn().mockResolvedValueOnce({});
+    req.body.booksId = 'previous-book-id';
+    await updateBorrowing(req, res);
 
-  //   await updateBorrowing(req, res);
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({
+      msg: 'Member belum mengembalikan buku pinjaman sebelumnya',
+    });
+  });
 
-  //   expect(res.status).toHaveBeenCalledWith(400);
-  //   expect(res.json).toHaveBeenCalledWith({
-  //     msg: 'Member belum mengembalikan buku pinjaman sebelumnya',
-  //   });
-  // });
+  // Case 5 update Borrowing dan status buku
+  it('should update borrowing and book status', async () => {
+    const findOneBorrowing = (Borrowing.findOne = jest
+      .fn()
+      .mockResolvedValueOnce({
+        id: 1,
+        booksId: 2,
+        max_return: '2023-06-01',
+      } as Borrowing));
 
-  // case 5 berhasil update borrowing
-  it('should update borrowing if all conditions are met', async () => {
-    const findOneMock = jest.fn().mockResolvedValue({});
-    Borrowing.findOne = findOneMock;
-    Member.findOne = findOneMock;
-    Books.findOne = findOneMock;
-    // Books.update = jest.fn().mockResolvedValueOnce(undefined);
-    Borrowing.update = jest.fn().mockResolvedValueOnce(undefined);
+    const findOneMember = (Member.findOne = jest
+      .fn()
+      .mockResolvedValueOnce({} as Member));
+
+    const findOneBook = jest
+      .spyOn(Books, 'findOne')
+      .mockResolvedValueOnce({} as Books);
+
+    const updateSpyBorrowing = jest
+      .spyOn(Borrowing, 'update')
+      .mockResolvedValueOnce([1]);
+
+    const findOneBookToUpdate = jest
+      .spyOn(Books, 'findOne')
+      .mockResolvedValueOnce({borrowingId: 'borrowing-id'} as unknown as Books);
+
+    const updateBook = jest.spyOn(Books, 'update').mockResolvedValueOnce([1]);
 
     await updateBorrowing(req, res);
 
-    expect(Borrowing.findOne).toHaveBeenCalledWith({
+    expect(findOneBorrowing).toHaveBeenCalledWith({
       where: {id: 'borrowing-id'} as WhereOptions<Borrowing>,
     });
-    expect(Member.findOne).toHaveBeenCalledWith({
+
+    expect(findOneMember).toHaveBeenCalledWith({
       where: {id: 'member-id'} as WhereOptions<Member>,
     });
-    expect(Books.findOne).toHaveBeenCalledWith({
+
+    expect(findOneBook).toHaveBeenCalledWith({
       where: {id: 'books-id'} as WhereOptions<Books>,
     });
-    // expect(Books.update).toHaveBeenCalledWith(
-    //   {
-    //     borrowingId: null,
-    //     status: 'available',
-    //   },
-    //   {
-    //     where: {id: 'previous-book-id'} as WhereOptions<Books>,
-    //   },
-    // );
-    expect(Borrowing.update).toHaveBeenCalledWith(
+
+    expect(updateSpyBorrowing).toHaveBeenCalledWith(
       {
         memberId: 'member-id',
         booksId: 'books-id',
         borrow_at: '2023-06-01',
         return_at: '2023-06-08',
         max_return: '2023-06-08',
-        charge: '0',
+        charge: '11000',
         status: 'returned',
       },
-      {
-        where: {id: req.params.id} as WhereOptions<Borrowing>,
-      },
+      {where: {id: 1} as WhereOptions<Borrowing>},
     );
+
+    expect(findOneBookToUpdate).toHaveBeenCalledWith({
+      where: {borrowingId: 'borrowing-id'},
+    });
+
+    expect(updateBook).toHaveBeenCalledWith(
+      {
+        borrowingId: null,
+        status: 'available',
+      },
+      {where: {id: 2} as WhereOptions<Books>},
+    );
+
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({
       msg: 'Peminjaman dengan id borrowing-id berhasil di update ',
     });
   });
+  // it('should handle error', async () => {
+  //   jest.spyOn(Borrowing, 'findOne').mockRejectedValueOnce('Some error');
+
+  //   await updateBorrowing(req, res);
+
+  //   expect(res.status).toHaveBeenCalledWith(400);
+  //   expect(res.json).toHaveBeenCalledWith({
+  //     msg: 'Some error',
+  //   });
+  // });
 });
 // END update borrowing
 

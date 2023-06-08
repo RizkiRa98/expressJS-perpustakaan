@@ -26,25 +26,25 @@ export const deleteBorrowing = async (
     // cek jika ada borrowing Id pada books
     // maka ubah borrowingId menjadi null dan status books menjadi available
 
-    // const cekBorrowingId = await Books.findOne({
-    //   where: {
-    //     borrowingId: req.params.id,
-    //   },
-    // });
+    const cekBorrowingId = await Books.findOne({
+      where: {
+        borrowingId: req.params.id,
+      },
+    });
 
-    // if (cekBorrowingId) {
-    //   await Books.update(
-    //     {
-    //       borrowingId: null,
-    //       status: 'available',
-    //     },
-    //     {
-    //       where: {
-    //         id: borrowing.booksId,
-    //       } as WhereOptions<Books>,
-    //     },
-    //   );
-    // }
+    if (cekBorrowingId) {
+      await Books.update(
+        {
+          borrowingId: null,
+          status: 'available',
+        },
+        {
+          where: {
+            id: borrowing.booksId,
+          } as WhereOptions<Books>,
+        },
+      );
+    }
 
     await Borrowing.destroy({
       where: {
@@ -57,7 +57,6 @@ export const deleteBorrowing = async (
       msg: `Peminjaman dengan Id ${req.params.id} berhasil dihapus`,
     });
   } catch (error) {
-    console.log(error);
     res.status(400).json({msg: error});
   }
 };

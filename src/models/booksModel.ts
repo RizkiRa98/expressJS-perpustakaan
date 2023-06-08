@@ -27,7 +27,6 @@ class Books extends Model<BookAttributes> implements BookAttributes {
 
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
-  static associate: (models: any) => void;
 }
 
 Books.init(
@@ -85,21 +84,21 @@ Books.init(
     freezeTableName: true,
   },
 );
-// Categories.hasMany(Books, {foreignKey: 'categoryId'});
-// Borrowing.hasMany(Books, {foreignKey: 'borrowingId'});
-// Books.belongsTo(Categories, {as: 'categories', foreignKey: 'categoryId'});
+Categories.hasMany(Books, {foreignKey: 'categoryId'});
+Borrowing.hasMany(Books, {foreignKey: 'borrowingId'});
+Books.belongsTo(Categories, {foreignKey: 'categoryId'});
 
-// Books.belongsTo(Borrowing, {foreignKey: 'borrowingId'});
+Books.belongsTo(Borrowing, {foreignKey: 'borrowingId'});
 
-Categories.hasMany(Books, {
-  sourceKey: 'id',
-  as: 'Books',
-  foreignKey: 'categoryId',
-});
-Books.belongsTo(Categories, {foreignKey: 'id', as: 'Categories'});
+// Categories.hasMany(Books, {
+//   sourceKey: 'id',
+//   as: 'Books',
+//   foreignKey: 'categoryId',
+// });
+// Books.belongsTo(Categories, {foreignKey: 'id', as: 'Categories'});
 
-Borrowing.hasMany(Books, {as: 'Books', foreignKey: 'borrowingId'});
-Books.belongsTo(Borrowing, {as: 'Borrowing', foreignKey: 'id'});
+// Borrowing.hasMany(Books, {as: 'Books', foreignKey: 'borrowingId'});
+// Books.belongsTo(Borrowing, {as: 'Borrowing', foreignKey: 'id'});
 
 export default Books;
 

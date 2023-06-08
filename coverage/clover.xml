@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1686121211046" clover="3.2.0">
-  <project timestamp="1686121211046" name="All files">
-    <metrics statements="442" coveredstatements="374" conditionals="89" coveredconditionals="73" methods="52" coveredmethods="52" elements="583" coveredelements="499" complexity="0" loc="442" ncloc="442" packages="7" files="26" classes="26"/>
+<coverage generated="1686214498687" clover="3.2.0">
+  <project timestamp="1686214498688" name="All files">
+    <metrics statements="456" coveredstatements="413" conditionals="93" coveredconditionals="87" methods="52" coveredmethods="52" elements="601" coveredelements="552" complexity="0" loc="456" ncloc="456" packages="7" files="26" classes="26"/>
     <package name="config">
       <metrics statements="8" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="db.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\config\db.ts">
@@ -17,29 +17,28 @@
       </file>
     </package>
     <package name="controllers.Books">
-      <metrics statements="71" coveredstatements="48" conditionals="14" coveredconditionals="8" methods="10" coveredmethods="10"/>
+      <metrics statements="75" coveredstatements="65" conditionals="15" coveredconditionals="13" methods="10" coveredmethods="10"/>
       <file name="createBooks.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Books\createBooks.ts">
-        <metrics statements="20" coveredstatements="9" conditionals="5" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <metrics statements="19" coveredstatements="19" conditionals="5" coveredconditionals="5" methods="2" coveredmethods="2"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="7" count="1" type="stmt"/>
-        <line num="8" count="1" type="stmt"/>
-        <line num="9" count="1" type="cond" truecount="1" falsecount="2"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="11" count="0" type="stmt"/>
-        <line num="15" count="1" type="stmt"/>
-        <line num="21" count="1" type="cond" truecount="1" falsecount="0"/>
-        <line num="22" count="1" type="stmt"/>
-        <line num="25" count="1" type="stmt"/>
-        <line num="30" count="0" type="stmt"/>
-        <line num="35" count="0" type="cond" truecount="0" falsecount="1"/>
-        <line num="36" count="0" type="stmt"/>
-        <line num="37" count="0" type="stmt"/>
-        <line num="40" count="0" type="stmt"/>
-        <line num="41" count="0" type="stmt"/>
-        <line num="49" count="0" type="stmt"/>
-        <line num="51" count="0" type="stmt"/>
-        <line num="52" count="0" type="stmt"/>
+        <line num="7" count="5" type="stmt"/>
+        <line num="8" count="5" type="stmt"/>
+        <line num="9" count="5" type="stmt"/>
+        <line num="10" count="5" type="cond" truecount="3" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="17" count="4" type="stmt"/>
+        <line num="22" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="2" type="stmt"/>
+        <line num="34" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
       </file>
       <file name="deleteBooks.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Books\deleteBooks.ts">
         <metrics statements="12" coveredstatements="10" conditionals="1" coveredconditionals="1" methods="2" coveredmethods="2"/>
@@ -79,80 +78,92 @@
         <line num="75" count="0" type="stmt"/>
       </file>
       <file name="updateBooks.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Books\updateBooks.ts">
-        <metrics statements="20" coveredstatements="14" conditionals="7" coveredconditionals="4" methods="2" coveredmethods="2"/>
+        <metrics statements="25" coveredstatements="21" conditionals="8" coveredconditionals="6" methods="2" coveredmethods="2"/>
         <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="10" count="2" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="13" count="2" type="stmt"/>
-        <line num="15" count="2" type="stmt"/>
-        <line num="22" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="10" count="5" type="stmt"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="22" count="5" type="cond" truecount="1" falsecount="0"/>
         <line num="23" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="35" count="1" type="cond" truecount="1" falsecount="2"/>
+        <line num="30" count="4" type="stmt"/>
+        <line num="35" count="4" type="cond" truecount="1" falsecount="2"/>
         <line num="36" count="0" type="stmt"/>
         <line num="37" count="0" type="stmt"/>
-        <line num="54" count="1" type="cond" truecount="2" falsecount="1"/>
-        <line num="55" count="0" type="stmt"/>
-        <line num="56" count="0" type="stmt"/>
-        <line num="59" count="1" type="stmt"/>
-        <line num="76" count="1" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
+        <line num="47" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="54" count="3" type="cond" truecount="3" falsecount="0"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="stmt"/>
+        <line num="76" count="2" type="stmt"/>
         <line num="80" count="0" type="stmt"/>
         <line num="81" count="0" type="stmt"/>
       </file>
     </package>
     <package name="controllers.Borrowing">
-      <metrics statements="91" coveredstatements="76" conditionals="20" coveredconditionals="13" methods="8" coveredmethods="8"/>
+      <metrics statements="100" coveredstatements="97" conditionals="23" coveredconditionals="22" methods="8" coveredmethods="8"/>
       <file name="createBorrowing.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Borrowing\createBorrowing.ts">
-        <metrics statements="32" coveredstatements="28" conditionals="9" coveredconditionals="7" methods="2" coveredmethods="2"/>
+        <metrics statements="36" coveredstatements="36" conditionals="10" coveredconditionals="10" methods="2" coveredmethods="2"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="9" count="1" type="stmt"/>
-        <line num="12" count="5" type="stmt"/>
-        <line num="13" count="5" type="stmt"/>
-        <line num="16" count="5" type="stmt"/>
-        <line num="23" count="5" type="cond" truecount="1" falsecount="0"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="27" count="1" type="stmt"/>
-        <line num="31" count="4" type="stmt"/>
-        <line num="37" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="12" count="7" type="stmt"/>
+        <line num="13" count="7" type="stmt"/>
+        <line num="14" count="7" type="stmt"/>
+        <line num="16" count="7" type="stmt"/>
+        <line num="22" count="6" type="cond" truecount="3" falsecount="0"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="30" count="5" type="stmt"/>
+        <line num="37" count="5" type="cond" truecount="1" falsecount="0"/>
         <line num="38" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
-        <line num="45" count="3" type="cond" truecount="3" falsecount="0"/>
-        <line num="46" count="1" type="stmt"/>
-        <line num="49" count="1" type="stmt"/>
-        <line num="53" count="2" type="stmt"/>
-        <line num="59" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="45" count="4" type="stmt"/>
+        <line num="51" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="59" count="3" type="cond" truecount="3" falsecount="0"/>
         <line num="60" count="1" type="stmt"/>
-        <line num="61" count="1" type="stmt"/>
-        <line num="65" count="1" type="stmt"/>
-        <line num="71" count="1" type="cond" truecount="1" falsecount="2"/>
-        <line num="72" count="0" type="stmt"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="79" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="73" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
         <line num="81" count="1" type="stmt"/>
         <line num="82" count="1" type="stmt"/>
-        <line num="88" count="1" type="stmt"/>
-        <line num="121" count="1" type="stmt"/>
-        <line num="123" count="0" type="stmt"/>
-        <line num="124" count="0" type="stmt"/>
+        <line num="87" count="1" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="99" count="1" type="stmt"/>
+        <line num="106" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="107" count="1" type="stmt"/>
+        <line num="120" count="1" type="stmt"/>
+        <line num="122" count="1" type="stmt"/>
+        <line num="123" count="1" type="stmt"/>
       </file>
       <file name="deleteBorrowing.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Borrowing\deleteBorrowing.ts">
-        <metrics statements="12" coveredstatements="8" conditionals="1" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <metrics statements="15" coveredstatements="15" conditionals="2" coveredconditionals="2" methods="2" coveredmethods="2"/>
+        <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="7" count="1" type="stmt"/>
-        <line num="10" count="1" type="stmt"/>
-        <line num="11" count="1" type="stmt"/>
-        <line num="12" count="1" type="stmt"/>
-        <line num="19" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="20" count="0" type="stmt"/>
-        <line num="23" count="0" type="stmt"/>
+        <line num="10" count="3" type="stmt"/>
+        <line num="11" count="3" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="19" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="35" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="36" count="1" type="stmt"/>
         <line num="49" count="1" type="stmt"/>
         <line num="56" count="1" type="stmt"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="61" count="0" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
       </file>
       <file name="getBorrowing.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Borrowing\getBorrowing.ts">
         <metrics statements="10" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
@@ -168,28 +179,28 @@
         <line num="37" count="0" type="stmt"/>
       </file>
       <file name="updateBorrowing.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\controllers\Borrowing\updateBorrowing.ts">
-        <metrics statements="37" coveredstatements="32" conditionals="10" coveredconditionals="6" methods="2" coveredmethods="2"/>
+        <metrics statements="39" coveredstatements="38" conditionals="11" coveredconditionals="10" methods="2" coveredmethods="2"/>
         <line num="4" count="1" type="stmt"/>
         <line num="5" count="1" type="stmt"/>
         <line num="6" count="1" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="13" count="4" type="stmt"/>
-        <line num="15" count="4" type="stmt"/>
-        <line num="22" count="4" type="cond" truecount="1" falsecount="0"/>
+        <line num="13" count="5" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="22" count="5" type="cond" truecount="1" falsecount="0"/>
         <line num="23" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="29" count="3" type="stmt"/>
-        <line num="32" count="3" type="stmt"/>
-        <line num="37" count="3" type="cond" truecount="1" falsecount="0"/>
+        <line num="29" count="4" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="37" count="4" type="cond" truecount="1" falsecount="0"/>
         <line num="38" count="1" type="stmt"/>
         <line num="41" count="1" type="stmt"/>
-        <line num="45" count="2" type="stmt"/>
-        <line num="50" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="45" count="3" type="stmt"/>
+        <line num="50" count="3" type="cond" truecount="1" falsecount="0"/>
         <line num="51" count="1" type="stmt"/>
         <line num="54" count="1" type="stmt"/>
-        <line num="59" count="1" type="cond" truecount="1" falsecount="2"/>
-        <line num="60" count="0" type="stmt"/>
-        <line num="63" count="0" type="stmt"/>
+        <line num="59" count="2" type="cond" truecount="3" falsecount="0"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
         <line num="67" count="1" type="stmt"/>
         <line num="69" count="1" type="stmt"/>
         <line num="70" count="1" type="stmt"/>
@@ -197,15 +208,17 @@
         <line num="76" count="1" type="stmt"/>
         <line num="77" count="1" type="stmt"/>
         <line num="81" count="1" type="stmt"/>
-        <line num="82" count="1" type="cond" truecount="0" falsecount="1"/>
-        <line num="83" count="0" type="stmt"/>
+        <line num="82" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="83" count="1" type="stmt"/>
         <line num="87" count="1" type="stmt"/>
         <line num="90" count="1" type="cond" truecount="1" falsecount="0"/>
         <line num="91" count="1" type="stmt"/>
-        <line num="117" count="1" type="stmt"/>
-        <line num="137" count="1" type="stmt"/>
-        <line num="141" count="0" type="stmt"/>
-        <line num="142" count="0" type="stmt"/>
+        <line num="96" count="1" type="stmt"/>
+        <line num="114" count="1" type="stmt"/>
+        <line num="120" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="121" count="1" type="stmt"/>
+        <line num="136" count="1" type="stmt"/>
+        <line num="140" count="0" type="stmt"/>
       </file>
     </package>
     <package name="controllers.Category">
@@ -518,22 +531,23 @@
       </file>
     </package>
     <package name="models">
-      <metrics statements="14" coveredstatements="14" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <metrics statements="15" coveredstatements="15" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="borrowingModel.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\models\borrowingModel.ts">
-        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
         <line num="36" count="1" type="stmt"/>
         <line num="93" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
         <line num="97" count="1" type="stmt"/>
       </file>
       <file name="categoryModel.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\models\categoryModel.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="1" type="stmt"/>
-        <line num="30" count="1" type="stmt"/>
-        <line num="44" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
       </file>
       <file name="memberModel.ts" path="C:\File Eki\TypeScript\typescript-express-perpus\src\models\memberModel.ts">
         <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

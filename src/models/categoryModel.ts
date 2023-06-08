@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable brace-style */
-import {Model, DataTypes, Association} from 'sequelize';
+import {Model, DataTypes} from 'sequelize';
 import db from '../config/db';
-import Books from './booksModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model category
 interface CategoriesAttributes {
@@ -21,10 +20,10 @@ class Categories
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 
-  public static associations: {
-    category: Association<Books, Categories>;
-  };
-  static associate: (models: any) => void;
+  // public static associations: {
+  //   category: Association<Books, Categories>;
+  // };
+  // static associate: (models: any) => void;
 }
 
 Categories.init(

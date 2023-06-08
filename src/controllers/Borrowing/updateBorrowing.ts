@@ -92,56 +92,52 @@ export const updateBorrowing = async (
       // cek jika ada borrowing Id pada books
       // maka ubah borrowingId menjadi null dan status books menjadi available
 
-      // const cekBorrowingId = await Books.findOne({
-      //   where: {
-      //     borrowingId: req.params.id,
-      //   },
-      // });
-
-      // if (cekBorrowingId) {
-      //   await Books.update(
-      //     {
-      //       borrowingId: null,
-      //       status: 'available',
-      //     },
-      //     {
-      //       where: {
-      //         id: borrowing.booksId,
-      //       } as WhereOptions<Books>,
-      //     },
-      //   );
-      // }
-    }
-
-    // Update borrowing
-    await Borrowing.update(
-      {
-        memberId: memberId,
-        booksId: booksId,
-        borrow_at: borrow_at,
-        return_at: return_at,
-        max_return: borrow_at
-          ? maxReturnDate.toISOString().split('T')[0]
-          : borrowing.max_return,
-        charge: chargeString,
-        status: status,
-      },
-      {
+      // Update borrowing
+      await Borrowing.update(
+        {
+          memberId: memberId,
+          booksId: booksId,
+          borrow_at: borrow_at,
+          return_at: return_at,
+          max_return: borrow_at
+            ? maxReturnDate.toISOString().split('T')[0]
+            : borrowing.max_return,
+          charge: chargeString,
+          status: status,
+        },
+        {
+          where: {
+            id: borrowing.id,
+          } as WhereOptions<Borrowing>,
+        },
+      );
+      const cekBorrowingId = await Books.findOne({
         where: {
-          id: borrowing.id,
-        } as WhereOptions<Borrowing>,
-      },
-    );
+          borrowingId: req.params.id,
+        },
+      });
+
+      if (cekBorrowingId) {
+        await Books.update(
+          {
+            borrowingId: null,
+            status: 'available',
+          },
+          {
+            where: {
+              id: borrowing.booksId,
+            } as WhereOptions<Books>,
+          },
+        );
+      }
+    }
 
     // respon status updated
     res.status(200).json({
       msg: `Peminjaman dengan id ${req.params.id} berhasil di update `,
     });
   } catch (error) {
-    console.log(error);
-    res.status(400).json({
-      msg: error,
-    });
+    res.status(400).json({msg: error});
   }
 };
 
