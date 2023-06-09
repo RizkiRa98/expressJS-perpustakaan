@@ -2,7 +2,6 @@
 import {Model, DataTypes} from 'sequelize';
 import db from '../config/db';
 import Member from './memberModel';
-import Books from './booksModel';
 
 // Mendefinisikan atribut yang dimiliki oleh model borrowing
 interface BorrowingAttributes {

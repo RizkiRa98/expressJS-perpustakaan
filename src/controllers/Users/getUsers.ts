@@ -4,6 +4,7 @@ import {WhereOptions} from 'sequelize';
 
 // fungsi get user menggunakan async
 // agar bisa dilakukan saat melakukan proses yg lain
+
 export const getUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await Users.findAll({

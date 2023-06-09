@@ -8,7 +8,7 @@ export const addBooks = async (req: Request, res: Response): Promise<void> => {
   try {
     const {name, author, publisher, categoryId, status, borrowingId} = req.body;
     if (status !== 'available' && status !== 'unavailable') {
-      res.json({msg: 'Status harus available atau unavailable'});
+      res.status(400).json({msg: 'Status harus available atau unavailable'});
       return;
     }
 
@@ -46,7 +46,7 @@ export const addBooks = async (req: Request, res: Response): Promise<void> => {
       status: status,
       borrowingId: borrowingId,
     });
-    res.json({msg: 'Buku baru berhasil ditambahkan'});
+    res.status(200).json({msg: 'Buku baru berhasil ditambahkan'});
   } catch (error) {
     // console.log(error);
     res.json({

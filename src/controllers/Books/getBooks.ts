@@ -25,7 +25,7 @@ export const getBooks = async (req: Request, res: Response): Promise<void> => {
         },
       ],
     });
-    res.json(book);
+    res.status(200).json(book);
   } catch (error) {
     console.log(error);
     res.json({msg: error});
