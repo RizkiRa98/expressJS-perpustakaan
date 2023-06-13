@@ -21,7 +21,10 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
     }
 
     // Cek ke cocokan password yang di request dengan yg di database
-    const match = await bcrypt.compare(req.body.password, user[0].password);
+    const match = await bcrypt.compare(
+      req.body.password.toString(),
+      user[0].password,
+    );
 
     // Jika password dan confirm password tidak cocok
     if (!match) {
@@ -40,14 +43,14 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
       {userId, name, email, role},
       process.env.ACCESS_TOKEN_SECRET!,
       {
-        expiresIn: '20s',
+        expiresIn: '1d',
       },
     );
 
     // Membuat refresh token
     const refreshToken = jwt.sign(
       {userId, name, email, role},
-      process.env.REFRESH_TOKEN_SECRET!,
+      process.env.ACCESS_TOKEN_SECRET!,
       {
         expiresIn: '1d',
       },
@@ -66,6 +69,7 @@ export const Login = async (req: Request, res: Response): Promise<void> => {
       httpOnly: true,
       maxAge: 24 * 60 * 60 * 1000, // expired dalam 1 hari
     });
+    // console.log({accessToken});
     res.json({accessToken});
   } catch (error) {
     res.status(404);

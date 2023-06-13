@@ -8,10 +8,10 @@ export const getMember = async (req: Request, res: Response): Promise<void> => {
     const members = await Member.findAll({
       attributes: ['id', 'name', 'email', 'phone', 'createdAt'],
     });
-    res.json(members);
+    res.status(200).json(members);
   } catch (error) {
     console.log(error);
-    res.json({msg: error});
+    res.status(500).json({msg: error});
   }
 };
 
@@ -36,7 +36,7 @@ export const getMemberById = async (
     res.json(members);
   } catch (error) {
     console.log(error);
-    res.json({msg: error});
+    res.status(500).json({msg: error});
   }
 };
 

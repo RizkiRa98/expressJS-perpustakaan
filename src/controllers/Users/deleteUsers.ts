@@ -48,6 +48,8 @@ export const deleteUser = async (
       .json({msg: `User dengan Id ${req.params.id} berhasil dihapus`});
   } catch (error) {
     // Jika terjadi error pada try
+    console.log(error);
+
     res.status(400).json({msg: error});
   }
 };

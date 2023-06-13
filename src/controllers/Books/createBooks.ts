@@ -7,6 +7,7 @@ import {WhereOptions} from 'sequelize';
 export const addBooks = async (req: Request, res: Response): Promise<void> => {
   try {
     const {name, author, publisher, categoryId, status, borrowingId} = req.body;
+    console.log(req.body);
     if (status !== 'available' && status !== 'unavailable') {
       res.status(400).json({msg: 'Status harus available atau unavailable'});
       return;
@@ -48,7 +49,7 @@ export const addBooks = async (req: Request, res: Response): Promise<void> => {
     });
     res.status(200).json({msg: 'Buku baru berhasil ditambahkan'});
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     res.json({
       msg: error,
     });

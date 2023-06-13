@@ -3,6 +3,7 @@ const app = express();
 // Import swagger
 import swaggerjsdoc from 'swagger-jsdoc';
 import swaggerui from 'swagger-ui-express';
+import swaggerOptions from './swaggerOption';
 
 // Import database
 import db from './config/db';
@@ -49,31 +50,10 @@ connectDb();
 app.use(cookieParser());
 // Agar express bisa menerima data dalam bentuk JSON
 app.use(express.json());
-const options = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'ExpressTS Perpustakaan',
-      version: '1.0.0',
-      description:
-        'Dokumentasi API express typescript perpustakaan menggunakan Swagger',
-    },
-    servers: [
-      {
-        url: 'http://localhost:3000/',
-      },
-    ],
-  },
-  apis: [
-    'src/routes/userRoutes.ts',
-    'src/routes/memberRoutes.ts',
-    'src/routes/categoryRoutes.ts',
-    'src/routes/booksRoutes.ts',
-    'src/routes/borrowingRoutes.ts',
-  ],
-};
-const swagger = swaggerjsdoc(options);
-app.use('/api-docs', swaggerui.serve, swaggerui.setup(swagger));
+
+// Swagger
+const spec = swaggerjsdoc(swaggerOptions);
+app.use('/api-docs', swaggerui.serve, swaggerui.setup(spec));
 
 // Middleware Router
 app.use(UserRoutes);
