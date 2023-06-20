@@ -7,17 +7,21 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from 'src/models/entities/users';
-import { VerifyToken } from 'src/middleware/middleware.verifytoken';
 import { CreateUserDto } from './dto/createUser.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
+import { JwtGuard } from 'src/auth/guard/auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   // Get all data user
+  @UseGuards(JwtGuard)
   @Get()
   async findAll(): Promise<User[]> {
     const user = await this.usersService.findAllUser();
@@ -45,5 +49,13 @@ export class UsersController {
   @Delete(':id')
   async deleteUserById(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
+  }
+
+  @Put(':id')
+  async updateUserById(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
+    return await this.usersService.updateUser(id, updateUserDto);
   }
 }
