@@ -1,41 +1,59 @@
 import { AuthGuard } from '@nestjs/passport';
-import { Request, Response, NextFunction } from 'express';
-import { User } from 'src/models/entities/users';
+import {
+  CanActivate,
+  Injectable,
+  ExecutionContext,
+  UnauthorizedException,
+} from '@nestjs/common';
+// import { User } from 'src/models/entities/users';
+import * as jwt from 'jsonwebtoken';
+import { Observable } from 'rxjs';
 
+// Menambahkan custom request menggunakan interface
 interface UserRequest extends Request {
   userId?: number;
   name?: string;
   email?: string;
   role?: 'super admin' | 'admin';
 }
-export class JwtGuard extends AuthGuard('jwt') {
-  constructor() {
-    super();
-  }
-  async use(req: UserRequest, res: Response, next: NextFunction) {
-    // const authHeader = req.headers.authorization;
-    // const token = authHeader && authHeader.split(' ')[1];
-    if (!req.cookies.refreshToken) {
-      res.status(401).json({
-        msg: 'Unathorize, anda belum login!',
-      });
+
+@Injectable()
+export class JwtGuard extends AuthGuard('jwt') implements CanActivate {
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest<UserRequest>();
+    const authHeader = request.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
+
+    if (!token) {
+      throw new UnauthorizedException('Unauthorze, anda belum login');
     }
 
-    const user = await User.findOne({
-      where: { refresh_token: req.cookies.refreshToken },
-    });
+    try {
+      const accessTokenSecret = process.env.ACCESS_TOKEN_SECRET;
 
-    if (!user) {
-      res.status(404).json({
-        msg: 'Anda Belum Login!',
-      });
-      return;
+      if (!accessTokenSecret) {
+        throw new Error('Access token secret is not defined');
+      }
+
+      const decoded = jwt.verify(token, accessTokenSecret) as {
+        userId: number;
+        email: string;
+        name: string;
+        role: 'super admin' | 'admin';
+      };
+
+      request.userId = decoded.userId;
+      request.name = decoded.name;
+      request.email = decoded.email;
+      request.role = decoded.role;
+
+      return super.canActivate(context);
+    } catch (error) {
+      console.log(error);
+
+      throw new UnauthorizedException('Token tidak valid!');
     }
-
-    req.userId = user.id;
-    req.name = user.name;
-    req.email = user.email;
-    req.role = user.role;
-    next();
   }
 }

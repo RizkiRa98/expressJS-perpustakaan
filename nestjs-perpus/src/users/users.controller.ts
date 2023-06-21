@@ -29,6 +29,7 @@ export class UsersController {
   }
 
   // Get data user by id
+  @UseGuards(JwtGuard)
   @Get(':id')
   async findById(@Param('id') id: number): Promise<User | null> {
     const user = await this.usersService.findUserById(id);
@@ -39,6 +40,7 @@ export class UsersController {
   }
 
   // Create data user
+  @UseGuards(JwtGuard)
   @Post('createUser')
   async createUser(@Body() createUserDto: CreateUserDto) {
     await this.usersService.createUser(createUserDto);
@@ -46,11 +48,14 @@ export class UsersController {
   }
 
   // Delete data user
+  @UseGuards(JwtGuard)
   @Delete(':id')
   async deleteUserById(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
   }
 
+  // Update data user
+  @UseGuards(JwtGuard)
   @Put(':id')
   async updateUserById(
     @Param('id', ParseIntPipe) id: number,

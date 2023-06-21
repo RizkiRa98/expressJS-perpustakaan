@@ -40,6 +40,17 @@ export class UsersService {
   async createUser(createUserDto: CreateUserDto): Promise<void> {
     const { name, email, password, confPassword, role } = createUserDto;
 
+    // Validasi jika nama kosong
+    if (name === null || name === undefined || name === '') {
+      throw new HttpException(
+        {
+          status: HttpStatus.BAD_REQUEST,
+          error: 'Nama tidak boleh kosong',
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     // Validasi jika format email salah
     if (!isEmail(email)) {
       throw new HttpException(

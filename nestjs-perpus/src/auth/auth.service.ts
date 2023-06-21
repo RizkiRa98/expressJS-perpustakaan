@@ -11,67 +11,71 @@ export class AuthService {
   constructor(@InjectModel(User) private userModel: typeof User) {}
 
   // Function login
-  async login(authDto: AuthDto, res: Response): Promise<string> {
-    const user = await this.userModel.findOne({
-      where: {
-        email: authDto.email,
-      },
-    });
-
-    // Cek jika user email tidak cocok
-    if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'Email atau Password Salah',
+  async login(authDto: AuthDto): Promise<string> {
+    try {
+      const user = await this.userModel.findOne({
+        where: {
+          email: authDto.email,
         },
-        HttpStatus.BAD_REQUEST,
+      });
+
+      // Cek jika user email tidak cocok
+      if (!user) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'Email atau Password Salah',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Cek kecocokan password dengan password pada user
+      const matchPass = await bcrypt.compare(authDto.password, user.password);
+
+      if (!matchPass) {
+        throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            error: 'Email atau Password Salah',
+          },
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+
+      // Membuat accessToken dan refreshToken
+      const { id, name, email, role } = user;
+
+      // Membuat accessToken
+      const accessToken = jwt.sign(
+        { userId: id, name, email, role },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '1d' },
       );
-    }
 
-    // Cek kecocokan password dengan password pada user
-    const matchPass = await bcrypt.compare(authDto.password, user.password);
+      // Membuat refreshToken
+      const refreshToken = jwt.sign(
+        { userId: id, name, email, role },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '1d' },
+      );
 
-    if (!matchPass) {
-      throw new HttpException(
+      // Update user refresh token
+      await this.userModel.update(
         {
-          status: HttpStatus.BAD_REQUEST,
-          error: 'Email atau Password Salah',
+          refresh_token: refreshToken,
         },
-        HttpStatus.BAD_REQUEST,
+        { where: { id: user.id } },
       );
+      // res.cookie('refreshToken', refreshToken, {
+      //   httpOnly: true,
+      //   maxAge: 24 * 60 * 60 * 1000,
+      // });
+      return accessToken;
+    } catch (error) {
+      console.log(error);
+      return error;
     }
-
-    // Membuat accessToken dan refreshToken
-    const { id, name, email, role } = user;
-
-    // Membuat accessToken
-    const accessToken = jwt.sign(
-      { userId: id, name, email, role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1d' },
-    );
-
-    // Membuat refreshToken
-    const refreshToken = jwt.sign(
-      { userId: id, name, email, role },
-      process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: '1d' },
-    );
-
-    // Update user refresh token
-    await this.userModel.update(
-      {
-        refresh_token: refreshToken,
-      },
-      { where: { id: user.id } },
-    );
-    res.cookie('refreshToken', refreshToken, {
-      httpOnly: true,
-      maxAge: 24 * 60 * 60 * 1000,
-    });
-
-    return accessToken;
   }
 
   // Function Logout
